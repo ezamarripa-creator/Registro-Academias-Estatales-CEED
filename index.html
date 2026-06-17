@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Participantes — Academias Estatales</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       TOKENS DE DISEÑO — Paleta Institucional
+       Negro, Blanco, Gris, Beige, Tierra + tonos suaves
+    ============================================================ */
+    :root {
+      --c-bg:          #F5F3EF;       /* Beige claro de fondo */
+      --c-surface:     #FFFFFF;       /* Blanco de tarjetas */
+      --c-sidebar:     #1A1A1A;       /* Negro profundo */
+      --c-accent:      #7C5C3E;       /* Marrón/tierra principal */
+      --c-accent-lt:   #A6825F;       /* Tierra claro (hover) */
+      --c-accent-bg:   #EDE5DA;       /* Fondo beige cálido */
+      --c-text:        #1C1C1C;       /* Texto principal */
+      --c-text-muted:  #6B6559;       /* Texto secundario */
+      --c-border:      #D8D0C4;       /* Bordes suaves */
+      --c-gris:        #4A4A4A;       /* Gris medio */
+      --c-success:     #3E7C5C;       /* Verde tono */
+      --c-warn:        #8C6D2F;       /* Ámbar tierra */
+      --c-error:       #7C3E3E;       /* Rojo apagado */
+      --c-blue-soft:   #3E5C7C;       /* Azul suave institucional */
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.10);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.13);
+      --radius:    10px;
+      --radius-lg: 16px;
+      --font-body: 'Inter', sans-serif;
+      --font-display: 'Playfair Display', serif;
+    }
+
+    /* ============================================================
+       RESET Y BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--c-bg);
+      color: var(--c-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ============================================================
+       BARRA LATERAL — FIRMA VISUAL ÚNICA
+    ============================================================ */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, #1A1A1A 0%, #7C5C3E 50%, #A6825F 100%);
+      z-index: 100;
+    }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    .site-header {
+      background: var(--c-sidebar);
+      color: #fff;
+      padding: 20px 40px 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      z-index: 10;
+    }
+    .site-header__brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .site-header__icon {
+      width: 42px; height: 42px;
+      background: var(--c-accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .site-header__title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: .01em;
+      line-height: 1.25;
+    }
+    .site-header__sub {
+      font-size: .72rem;
+      color: #A09588;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .site-header__nav {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-nav {
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background .2s, color .2s;
+      letter-spacing: .03em;
+    }
+    .btn-nav--active {
+      background: var(--c-accent);
+      color: #fff;
+    }
+    .btn-nav--ghost {
+      background: transparent;
+      color: #C8BFB5;
+      border: 1px solid #3A3A3A;
+    }
+    .btn-nav--ghost:hover { background: #2A2A2A; color: #fff; }
+
+    /* ============================================================
+       MAIN LAYOUT
+    ============================================================ */
+    .main {
+      flex: 1;
+      padding: 36px 40px 60px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* TABS CONTENT */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ============================================================
+       SECCIÓN FORMULARIO
+    ============================================================ */
+    .section-label {
+      font-size: .68rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--c-accent);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--c-text);
+      margin-bottom: 4px;
+    }
+    .section-desc {
+      font-size: .88rem;
+      color: var(--c-text-muted);
+      margin-bottom: 32px;
+      max-width: 560px;
+      line-height: 1.6;
+    }
+
+    .form-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* TARJETA FORM */
+    .card {
+      background: var(--c-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 32px;
+      border: 1px solid var(--c-border);
+    }
+    .card + .card { margin-top: 20px; }
+
+    .card__section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .card__section-icon {
+      width: 32px; height: 32px;
+      background: var(--c-accent-bg);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      color: var(--c-accent);
+    }
+    .card__section-title {
+      font-weight: 600;
+      font-size: .92rem;
+      color: var(--c-text);
+    }
+
+    /* GRID DE CAMPOS */
+    .fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .field-full { grid-column: 1 / -1; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field label {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--c-gris);
+      letter-spacing: .02em;
+    }
+    .field label .req { color: var(--c-accent); margin-left: 2px; }
+
+    .field input,
+    .field select,
+    .field textarea {
+      padding: 10px 14px;
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: .88rem;
+      color: var(--c-text);
+      background: #FAFAF8;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--c-accent);
+      box-shadow: 0 0 0 3px rgba(124,92,62,.12);
+      background: #fff;
+    }
+    .field textarea { resize: vertical; min-height: 90px; }
+    .field select { appearance: none; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6559' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+      padding-right: 38px;
+    }
+
+    /* ACADEMIAS — CHECKBOXES */
+    .academias-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1.5px solid var(--c-border);
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      background: #FAFAF8;
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--c-gris);
+      user-select: none;
+    }
+    .check-item:hover { border-color: var(--c-accent-lt); background: var(--c-accent-bg); }
+    .check-item input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--c-accent);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .check-item.selected {
+      border-color: var(--c-accent);
+      background: var(--c-accent-bg);
+      color: var(--c-accent);
+    }
+
+    /* BTN SUBMIT */
+    .btn-submit {
+      width: 100%;
+      padding: 14px 28px;
+      background: var(--c-accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: .04em;
+      transition: background .2s, transform .1s;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-submit:hover { background: var(--c-accent-lt); }
+    .btn-submit:active { transform: scale(.98); }
+    .btn-submit:disabled { background: var(--c-border); color: #aaa; cursor: not-allowed; transform: none; }
+
+    /* ============================================================
+       PANEL LATERAL — RESUMEN
+    ============================================================ */
+    .sidebar-panel {
+      position: sticky;
+      top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .summary-card {
+      background: var(--c-sidebar);
+      color: #E8E0D8;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+    }
+    .summary-card__title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .summary-card__title::before {
+      content: '';
+      display: inline-block;
+      width: 3px; height: 16px;
+      background: var(--c-accent-lt);
+      border-radius: 2px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      font-size: .8rem;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-row__label { color: #A09588; }
+    .stat-row__value {
+      font-weight: 700;
+      font-size: .95rem;
+      color: #fff;
+    }
+    .stat-row__value.green { color: #6FC99A; }
+    .stat-row__value.amber { color: #E0B96A; }
+    .stat-row__value.blue  { color: #8AAFD4; }
+
+    .progress-bar-wrap {
+      margin-top: 16px;
+    }
+    .progress-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .72rem;
+      color: #A09588;
+      margin-bottom: 6px;
+    }
+    .progress-bar-bg {
+      height: 6px;
+      background: #2A2A2A;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--c-accent), var(--c-accent-lt));
+      border-radius: 3px;
+      transition: width .6s ease;
+    }
+
+    /* Academias mini-grid en el panel */
+    .acad-grid-mini {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .acad-mini-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,.04);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: .75rem;
+    }
+    .acad-mini-label { color: #C8BFB5; }
+    .acad-mini-count {
+      font-weight: 700;
+      color: var(--c-accent-lt);
+      min-width: 22px;
+      text-align: right;
+    }
+
+    /* ============================================================
+       TOAST / NOTIFICACIÓN
+    ============================================================ */
+    .toast {
+      position: fixed;
+      bottom: 30px; right: 30px;
+      padding: 14px 22px;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      color: #fff;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform .35s ease, opacity .35s ease;
+      max-width: 340px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast--success { background: var(--c-success); }
+    .toast--error   { background: var(--c-error); }
+    .toast--loading { background: var(--c-blue-soft); }
+
+    /* ============================================================
+       SPINNER
+    ============================================================ */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================
+       TAB: DASHBOARD
+    ============================================================ */
+    .dash-header { margin-bottom: 28px; }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: var(--c-surface);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      border: 1px solid var(--c-border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .kpi-card__label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--c-text-muted);
+    }
+    .kpi-card__value {
+      font-family: var(--font-display);
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--c-text);
+      line-height: 1;
+    }
+    .kpi-card__sub { font-size: .75rem; color: var(--c-text-muted); }
+    .kpi-card.accent { background: var(--c-accent); border-color: var(--c-accent); }
+    .kpi-card.accent .kpi-card__label { color: rgba(255,255,255,.7); }
+    .kpi-card.accent .kpi-card__value { color: #fff; }
+    .kpi-card.accent .kpi-card__sub { color: rgba(255,255,255,.6); }
+
+    /* TABLA SUBSISTEMAS */
+    .table-wrap {
+      background: var(--c-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--c-border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .table-wrap__header {
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .table-wrap__title {
+      font-weight: 700;
+      font-size: .95rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .82rem;
+    }
+    th {
+      background: #F0EDE7;
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      color: var(--c-gris);
+      font-size: .72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--c-border);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #F0EDE7;
+      color: var(--c-text);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #FAFAF8; }
+
+    /* SEMÁFOROS */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    .badge--completo   { background: #D8F0E6; color: #2E6B48; }
+    .badge--parcial    { background: #FDF0D3; color: #7A5B1A; }
+    .badge--sin-envio  { background: #F5E8E8; color: #6B2A2A; }
+    .badge--dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+    }
+    .badge--completo .badge--dot  { background: #3E7C5C; }
+    .badge--parcial  .badge--dot  { background: #C8921A; }
+    .badge--sin-envio .badge--dot { background: #9B3B3B; }
+
+    /* MINI CHECKLIST DE ACADEMIAS EN TABLA */
+    .acad-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .acad-pill {
+      width: 22px; height: 22px;
+      border-radius: 5px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: .6rem;
+      font-weight: 700;
+      cursor: default;
+      title: attr(data-name);
+    }
+    .acad-pill.has  { background: #D8F0E6; color: #2E6B48; }
+    .acad-pill.miss { background: #F0EDE7; color: #C8BFB5; }
+
+    /* BARRA DE ACADEMIAS */
+    .acad-bar-row {
+      background: var(--c-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--c-border);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .acad-bar-title {
+      font-weight: 700;
+      font-size: .95rem;
+      margin-bottom: 18px;
+    }
+    .acad-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .acad-bar-label {
+      font-size: .78rem;
+      color: var(--c-text);
+      width: 220px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .acad-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #EDEAE5;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .acad-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--c-accent), var(--c-accent-lt));
+      border-radius: 4px;
+      transition: width .6s ease;
+    }
+    .acad-bar-count {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--c-accent);
+      min-width: 30px;
+      text-align: right;
+    }
+
+    /* BTN REFRESH */
+    .btn-refresh {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--c-border);
+      background: #fff;
+      color: var(--c-gris);
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-refresh:hover { border-color: var(--c-accent); color: var(--c-accent); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer {
+      background: var(--c-sidebar);
+      color: #5A5450;
+      font-size: .72rem;
+      text-align: center;
+      padding: 14px 40px;
+      letter-spacing: .04em;
+    }
+
+    /* ============================================================
+       OVERLAY DE CARGA INICIAL
+    ============================================================ */
+    #initial-loader {
+      position: fixed;
+      inset: 0;
+      background: var(--c-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      z-index: 9999;
+      transition: opacity .4s;
+    }
+    #initial-loader .loader-icon { font-size: 2.5rem; }
+    #initial-loader p {
+      font-size: .85rem;
+      color: var(--c-text-muted);
+      letter-spacing: .06em;
+    }
+    #initial-loader.hidden { opacity: 0; pointer-events: none; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      .site-header { padding: 16px 20px 16px 28px; }
+      .main { padding: 24px 20px 48px 28px; }
+      .form-layout { grid-template-columns: 1fr; }
+      .sidebar-panel { position: static; }
+      .fields-grid { grid-template-columns: 1fr; }
+      .academias-grid { grid-template-columns: 1fr; }
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .acad-bar-label { width: 130px; }
+    }
+    @media (max-width: 550px) {
+      .site-header__nav { gap: 4px; }
+      .btn-nav { padding: 7px 12px; font-size: .75rem; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra lateral firma visual -->
+  <div class="sidebar"></div>
+
+  <!-- Loader inicial -->
+  <div id="initial-loader">
+    <div class="loader-icon">📋</div>
+    <p>CARGANDO SISTEMA...</p>
+    <div class="spinner" style="border-color:rgba(124,92,62,.3);border-top-color:var(--c-accent);"></div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="site-header__brand">
+      <div class="site-header__icon">🎓</div>
+      <div>
+        <div class="site-header__title">Registro de Participantes</div>
+        <div class="site-header__sub">Academias Estatales — Concurso Estatal</div>
+      </div>
+    </div>
+    <nav class="site-header__nav">
+      <button class="btn-nav btn-nav--active" onclick="switchTab('formulario', this)">📝 Registro</button>
+      <button class="btn-nav btn-nav--ghost" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- ==================== TAB: FORMULARIO ==================== -->
+    <div id="tab-formulario" class="tab-panel active">
+      <div class="section-label">Captura de datos</div>
+      <h1 class="section-title">Registro de Participante</h1>
+      <p class="section-desc">Complete todos los campos para registrar la participación del subsistema en la academia correspondiente. Los datos se guardan automáticamente en el sistema de seguimiento.</p>
+
+      <div class="form-layout">
+        <!-- COLUMNA FORMULARIO -->
+        <div>
+          <!-- Bloque 1: Datos del subsistema -->
+          <div class="card">
+            <div class="card__section-header">
+              <span class="card__section-icon">🏛️</span>
+              <span class="card__section-title">Información del Subsistema</span>
+            </div>
+            <div class="fields-grid">
+              <div class="field">
+                <label for="subsistema">Subsistema <span class="req">*</span></label>
+                <select id="subsistema" required>
+                  <option value="">— Seleccione subsistema —</option>
+                  <option>Albert Einstein</option>
+                  <option>ByCENED</option>
+                  <option>CECATI</option>
+                  <option>CECyTED</option>
+                  <option>COBAED</option>
+                  <option>CONALEP</option>
+                  <option>DGB 9/31 de Gómez</option>
+                  <option>DGB Villa Unión</option>
+                  <option>DGETAyCM</option>
+                  <option>DGETI</option>
+                  <option>ESCUELAS PARTICULARES</option>
+                  <option>INSTITUTO "18 DE MARZO"</option>
+                  <option>PREPARATORIAS ESTATALES</option>
+                  <option>TELEBACHILLERATO COMUNITARIO</option>
+                  <option>UJED</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="responsable">Responsable (quien reporta) <span class="req">*</span></label>
+                <input type="text" id="responsable" placeholder="Nombre completo del responsable" required />
+              </div>
+              <div class="field field-full">
+                <label for="correo-resp">Correo del responsable <span class="req">*</span></label>
+                <input type="email" id="correo-resp" placeholder="correo@institucion.edu.mx" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- Bloque 2: Academia -->
+          <div class="card">
+            <div class="card__section-header">
+              <span class="card__section-icon">📚</span>
+              <span class="card__section-title">Academia que Participará <span class="req">*</span></span>
+            </div>
+            <div class="academias-grid" id="academias-grid">
+              <!-- Generadas por JS -->
+            </div>
+          </div>
+
+          <!-- Bloque 3: Datos del participante -->
+          <div class="card">
+            <div class="card__section-header">
+              <span class="card__section-icon">👤</span>
+              <span class="card__section-title">Datos del Participante</span>
+            </div>
+            <div class="fields-grid">
+              <div class="field field-full">
+                <label for="nombre-part">Nombre completo del participante <span class="req">*</span></label>
+                <input type="text" id="nombre-part" placeholder="Nombre Apellido Apellido" required />
+              </div>
+              <div class="field">
+                <label for="tel-part">Teléfono del participante <span class="req">*</span></label>
+                <input type="tel" id="tel-part" placeholder="618 000 0000" required />
+              </div>
+              <div class="field">
+                <label for="correo-part">Correo electrónico del participante <span class="req">*</span></label>
+                <input type="email" id="correo-part" placeholder="participante@correo.com" required />
+              </div>
+              <div class="field field-full">
+                <label for="observaciones">Observaciones</label>
+                <textarea id="observaciones" placeholder="Información adicional relevante (opcional)..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- BTN ENVIAR -->
+          <div class="card" style="padding: 20px 32px;">
+            <div id="form-error" style="color:var(--c-error);font-size:.82rem;margin-bottom:12px;display:none;"></div>
+            <button class="btn-submit" id="btn-submit" onclick="enviarRegistro()">
+              <span>Registrar Participación</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- COLUMNA LATERAL: RESUMEN -->
+        <div class="sidebar-panel" id="sidebar-summary">
+          <div class="summary-card">
+            <div class="summary-card__title">Resumen de Captura</div>
+            <div class="stat-row">
+              <span class="stat-row__label">Total subsistemas</span>
+              <span class="stat-row__value" id="sum-total">15</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-row__label">Con envío</span>
+              <span class="stat-row__value green" id="sum-con-envio">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-row__label">Sin envío</span>
+              <span class="stat-row__value amber" id="sum-sin-envio">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-row__label">Participación parcial</span>
+              <span class="stat-row__value blue" id="sum-parcial">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-row__label">Participación completa</span>
+              <span class="stat-row__value green" id="sum-completo">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-row__label">Total general</span>
+              <span class="stat-row__value" id="sum-general">—</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-label">
+                <span>Avance general</span>
+                <span id="sum-pct">0%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-card__title">Registros por Academia</div>
+            <div class="acad-grid-mini" id="acad-mini-grid">
+              <!-- Generado por JS -->
+            </div>
+          </div>
+
+          <button class="btn-refresh" onclick="cargarResumen()" style="width:100%;justify-content:center;">
+            <span>↻</span> Actualizar resumen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: DASHBOARD ==================== -->
+    <div id="tab-dashboard" class="tab-panel">
+      <div class="dash-header">
+        <div class="section-label">Control de seguimiento</div>
+        <h1 class="section-title">Dashboard de Participación</h1>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:4px;">
+          <p class="section-desc" style="margin-bottom:0;">Estado en tiempo real de los registros por subsistema y academia.</p>
+          <button class="btn-refresh" onclick="cargarDashboard()"><span>↻</span> Actualizar</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-row" id="kpi-row">
+        <div class="kpi-card accent">
+          <div class="kpi-card__label">Total subsistemas</div>
+          <div class="kpi-card__value" id="d-total">15</div>
+          <div class="kpi-card__sub">catálogo fijo</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Con envío</div>
+          <div class="kpi-card__value" id="d-con-envio">—</div>
+          <div class="kpi-card__sub">al menos una academia</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Sin envío</div>
+          <div class="kpi-card__value" id="d-sin-envio">—</div>
+          <div class="kpi-card__sub">pendientes</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Participación parcial</div>
+          <div class="kpi-card__value" id="d-parcial">—</div>
+          <div class="kpi-card__sub">1–7 academias</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Participación completa</div>
+          <div class="kpi-card__value" id="d-completo">—</div>
+          <div class="kpi-card__sub">8 academias</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Total registros</div>
+          <div class="kpi-card__value" id="d-general">—</div>
+          <div class="kpi-card__sub">participantes</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Avance general</div>
+          <div class="kpi-card__value" id="d-avance">0%</div>
+          <div class="kpi-card__sub">de 120 posibles</div>
+        </div>
+      </div>
+
+      <!-- TABLA SUBSISTEMAS -->
+      <div class="table-wrap">
+        <div class="table-wrap__header">
+          <span class="table-wrap__title">Estado por Subsistema</span>
+          <span style="font-size:.75rem;color:var(--c-text-muted);" id="tabla-ts"></span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table id="tabla-subsistemas">
+            <thead>
+              <tr>
+                <th>Subsistema</th>
+                <th>Estado</th>
+                <th>Academias</th>
+                <th>Registros</th>
+                <th>Último registro</th>
+                <th>Responsable</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-body">
+              <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--c-text-muted);">Cargando datos…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BARRAS POR ACADEMIA -->
+      <div class="acad-bar-row">
+        <div class="acad-bar-title">Registros por Academia</div>
+        <div id="acad-bars">
+          <!-- Generado por JS -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    Sistema de Registro Académico — Control Documental &nbsp;|&nbsp; Todos los datos se almacenan en Google Sheets de forma segura
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ============================================================
+       JAVASCRIPT PRINCIPAL
+  ============================================================ -->
+  <script>
+    /* ============================================================
+       CONFIGURACIÓN
+       REEMPLAZA ESTA URL CON LA DE TU WEB APP PUBLICADA EN APPS SCRIPT
+    ============================================================ */
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvapDDlRi6d3I9E5DkbUnM_FP_SC8mUZ1Ymxmllwtg7bRMm-9A6D7RSTT9bv40_k1h/exec';
+
+    /* Catálogo fijo de subsistemas */
+    const SUBSISTEMAS = [
+      'Albert Einstein', 'ByCENED', 'CECATI', 'CECyTED', 'COBAED',
+      'CONALEP', 'DGB 9/31 de Gómez', 'DGB Villa Unión', 'DGETAyCM',
+      'DGETI', 'ESCUELAS PARTICULARES', 'INSTITUTO "18 DE MARZO"',
+      'PREPARATORIAS ESTATALES', 'TELEBACHILLERATO COMUNITARIO', 'UJED'
+    ];
+
+    /* Catálogo fijo de academias */
+    const ACADEMIAS = [
+      { id: 'LC',   label: 'Lengua y Comunicación',                          abbr: 'LC'  },
+      { id: 'PM',   label: 'Pensamiento Matemático',                         abbr: 'PM'  },
+      { id: 'CN',   label: 'Ciencias Naturales, Experimentales y Tecnología', abbr: 'CN'  },
+      { id: 'CS',   label: 'Ciencias Sociales',                              abbr: 'CS'  },
+      { id: 'CH',   label: 'Conciencia Histórica',                           abbr: 'CH'  },
+      { id: 'PF',   label: 'Pensamiento Filosófico y Humanidades',           abbr: 'PF'  },
+      { id: 'CD',   label: 'Cultura Digital',                                abbr: 'CD'  },
+      { id: 'ING',  label: 'Inglés',                                         abbr: 'IN'  }
+    ];
+
+    /* Estado local de resumen */
+    let resumenData = null;
+
+    /* ============================================================
+       INIT
+    ============================================================ */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAcademiasGrid();
+      renderAcadMiniGrid();
+      renderAcadBars([]);
+      cargarResumen();
+      setTimeout(() => {
+        document.getElementById('initial-loader').classList.add('hidden');
+      }, 800);
+    });
+
+    /* ============================================================
+       RENDER ACADEMIAS (CHECKBOXES)
+    ============================================================ */
+    function renderAcademiasGrid() {
+      const container = document.getElementById('academias-grid');
+      container.innerHTML = ACADEMIAS.map(a => `
+        <label class="check-item" id="ci-${a.id}" onclick="toggleCheck('${a.id}',this)">
+          <input type="checkbox" id="chk-${a.id}" value="${a.id}" />
+          ${a.label}
+        </label>
+      `).join('');
+    }
+
+    function toggleCheck(id, el) {
+      const chk = document.getElementById('chk-' + id);
+      chk.checked = !chk.checked;
+      el.classList.toggle('selected', chk.checked);
+    }
+
+    function getAcademiasSeleccionadas() {
+      return ACADEMIAS
+        .filter(a => document.getElementById('chk-' + a.id)?.checked)
+        .map(a => a.label);
+    }
+
+    /* ============================================================
+       RENDER PANEL LATERAL MINI
+    ============================================================ */
+    function renderAcadMiniGrid(counts = {}) {
+      const container = document.getElementById('acad-mini-grid');
+      container.innerHTML = ACADEMIAS.map(a => `
+        <div class="acad-mini-row">
+          <span class="acad-mini-label">${a.label}</span>
+          <span class="acad-mini-count">${counts[a.label] ?? '—'}</span>
+        </div>
+      `).join('');
+    }
+
+    /* ============================================================
+       RENDER BARRAS DE ACADEMIAS (DASHBOARD)
+    ============================================================ */
+    function renderAcadBars(counts = {}) {
+      const maxVal = Math.max(...ACADEMIAS.map(a => counts[a.label] || 0), 1);
+      const container = document.getElementById('acad-bars');
+      container.innerHTML = ACADEMIAS.map(a => {
+        const v = counts[a.label] || 0;
+        const pct = Math.round((v / maxVal) * 100);
+        return `
+          <div class="acad-bar-item">
+            <span class="acad-bar-label" title="${a.label}">${a.label}</span>
+            <div class="acad-bar-bg">
+              <div class="acad-bar-fill" style="width:${pct}%"></div>
+            </div>
+            <span class="acad-bar-count">${v}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ============================================================
+       ENVIAR REGISTRO
+    ============================================================ */
+    async function enviarRegistro() {
+      const errEl = document.getElementById('form-error');
+      errEl.style.display = 'none';
+
+      // Recopilar valores
+      const subsistema   = document.getElementById('subsistema').value.trim();
+      const responsable  = document.getElementById('responsable').value.trim();
+      const correoResp   = document.getElementById('correo-resp').value.trim();
+      const academias    = getAcademiasSeleccionadas();
+      const nombrePart   = document.getElementById('nombre-part').value.trim();
+      const telPart      = document.getElementById('tel-part').value.trim();
+      const correoPart   = document.getElementById('correo-part').value.trim();
+      const obs          = document.getElementById('observaciones').value.trim();
+
+      // Validaciones
+      const errores = [];
+      if (!subsistema)          errores.push('Selecciona el subsistema.');
+      if (!responsable)         errores.push('Ingresa el nombre del responsable.');
+      if (!correoResp)          errores.push('Ingresa el correo del responsable.');
+      if (academias.length === 0) errores.push('Selecciona al menos una academia.');
+      if (!nombrePart)          errores.push('Ingresa el nombre del participante.');
+      if (!telPart)             errores.push('Ingresa el teléfono del participante.');
+      if (!correoPart)          errores.push('Ingresa el correo del participante.');
+
+      if (errores.length > 0) {
+        errEl.textContent = errores.join(' ');
+        errEl.style.display = 'block';
+        return;
+      }
+
+      // UI loading
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner"></div><span>Enviando...</span>';
+      showToast('Enviando registro al sistema…', 'loading');
+
+      const payload = {
+        action: 'registrar',
+        subsistema, responsable, correoResp,
+        academias: academias.join(', '),
+        nombrePart, telPart, correoPart, obs
+      };
+
+      try {
+        const resp = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(payload)
+        });
+        const data = await resp.json();
+        if (data.success) {
+          showToast('✓ Registro guardado correctamente', 'success');
+          limpiarFormulario();
+          cargarResumen();
+        } else {
+          throw new Error(data.error || 'Error desconocido');
+        }
+      } catch (err) {
+        showToast('✗ Error al guardar: ' + err.message, 'error');
+        errEl.textContent = 'Error al conectar con el servidor. Intente de nuevo.';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Registrar Participación</span><span>→</span>';
+      }
+    }
+
+    /* ============================================================
+       LIMPIAR FORMULARIO
+    ============================================================ */
+    function limpiarFormulario() {
+      document.getElementById('subsistema').value = '';
+      document.getElementById('responsable').value = '';
+      document.getElementById('correo-resp').value = '';
+      document.getElementById('nombre-part').value = '';
+      document.getElementById('tel-part').value = '';
+      document.getElementById('correo-part').value = '';
+      document.getElementById('observaciones').value = '';
+      ACADEMIAS.forEach(a => {
+        const chk = document.getElementById('chk-' + a.id);
+        if (chk) chk.checked = false;
+        const ci  = document.getElementById('ci-' + a.id);
+        if (ci)  ci.classList.remove('selected');
+      });
+    }
+
+    /* ============================================================
+       CARGAR RESUMEN (panel lateral + dashboard)
+    ============================================================ */
+    async function cargarResumen() {
+      try {
+        const url = APPS_SCRIPT_URL + '?action=resumen&t=' + Date.now();
+        const resp = await fetch(url);
+        const data = await resp.json();
+        if (data.success) {
+          resumenData = data.resumen;
+          actualizarPanelResumen(data.resumen);
+          if (document.getElementById('tab-dashboard').classList.contains('active')) {
+            actualizarDashboard(data.resumen);
+          }
+        }
+      } catch (e) {
+        console.warn('No se pudo cargar el resumen:', e.message);
+      }
+    }
+
+    async function cargarDashboard() {
+      await cargarResumen();
+      if (resumenData) actualizarDashboard(resumenData);
+    }
+
+    /* ============================================================
+       ACTUALIZAR PANEL LATERAL
+    ============================================================ */
+    function actualizarPanelResumen(r) {
+      const pct = Math.round((r.totalRegistros / (SUBSISTEMAS.length * ACADEMIAS.length)) * 100);
+
+      document.getElementById('sum-con-envio').textContent  = r.conEnvio  ?? 0;
+      document.getElementById('sum-sin-envio').textContent  = r.sinEnvio  ?? 0;
+      document.getElementById('sum-parcial').textContent    = r.parcial   ?? 0;
+      document.getElementById('sum-completo').textContent   = r.completo  ?? 0;
+      document.getElementById('sum-general').textContent    = r.totalRegistros ?? 0;
+      document.getElementById('sum-pct').textContent        = pct + '%';
+      document.getElementById('progress-fill').style.width  = pct + '%';
+
+      renderAcadMiniGrid(r.porAcademia || {});
+    }
+
+    /* ============================================================
+       ACTUALIZAR DASHBOARD
+    ============================================================ */
+    function actualizarDashboard(r) {
+      const pct = Math.round((r.totalRegistros / (SUBSISTEMAS.length * ACADEMIAS.length)) * 100);
+
+      document.getElementById('d-con-envio').textContent   = r.conEnvio  ?? 0;
+      document.getElementById('d-sin-envio').textContent   = r.sinEnvio  ?? 0;
+      document.getElementById('d-parcial').textContent     = r.parcial   ?? 0;
+      document.getElementById('d-completo').textContent    = r.completo  ?? 0;
+      document.getElementById('d-general').textContent     = r.totalRegistros ?? 0;
+      document.getElementById('d-avance').textContent      = pct + '%';
+
+      // Tabla de subsistemas
+      const tbody = document.getElementById('tabla-body');
+      if (!r.porSubsistema || r.porSubsistema.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--c-text-muted);">Sin registros aún</td></tr>';
+      } else {
+        // Construir mapa de datos reales
+        const mapaReal = {};
+        r.porSubsistema.forEach(s => { mapaReal[s.nombre] = s; });
+
+        tbody.innerHTML = SUBSISTEMAS.map(nombre => {
+          const s = mapaReal[nombre] || { nombre, academias: [], totalRegistros: 0, ultimaFecha: '—', responsable: '—' };
+          const numAcad = s.academias?.length || 0;
+          const estado  = numAcad === 0 ? 'sin-envio' : numAcad === ACADEMIAS.length ? 'completo' : 'parcial';
+          const badgeTxt = estado === 'completo' ? 'Completo' : estado === 'parcial' ? 'Parcial' : 'Sin envío';
+
+          const pills = ACADEMIAS.map(a => {
+            const tieneAcad = (s.academias || []).some(sa => sa.includes(a.abbr) || sa.includes(a.label));
+            return `<span class="acad-pill ${tieneAcad ? 'has' : 'miss'}" title="${a.label}">${a.abbr}</span>`;
+          }).join('');
+
+          return `
+            <tr>
+              <td><strong>${nombre}</strong></td>
+              <td><span class="badge badge--${estado}"><span class="badge--dot"></span>${badgeTxt}</span></td>
+              <td><div class="acad-pills">${pills}</div></td>
+              <td style="font-weight:700;">${s.totalRegistros || 0}</td>
+              <td style="color:var(--c-text-muted);font-size:.78rem;">${s.ultimaFecha || '—'}</td>
+              <td style="font-size:.78rem;">${s.responsable || '—'}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('tabla-ts').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-MX');
+
+      // Barras academias
+      renderAcadBars(r.porAcademia || {});
+    }
+
+    /* ============================================================
+       CAMBIAR TAB
+    ============================================================ */
+    function switchTab(tab, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.btn-nav').forEach(b => {
+        b.classList.remove('btn-nav--active');
+        b.classList.add('btn-nav--ghost');
+      });
+      document.getElementById('tab-' + tab).classList.add('active');
+      btn.classList.add('btn-nav--active');
+      btn.classList.remove('btn-nav--ghost');
+
+      if (tab === 'dashboard') cargarDashboard();
+    }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    let toastTimer;
+    function showToast(msg, tipo = 'success') {
+      const t = document.getElementById('toast');
+      clearTimeout(toastTimer);
+      t.className = 'toast toast--' + tipo;
+      const icon = tipo === 'success' ? '✓' : tipo === 'error' ? '✗' : '<div class="spinner"></div>';
+      t.innerHTML = icon + ' ' + msg;
+      t.classList.add('show');
+      if (tipo !== 'loading') {
+        toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+      }
+    }
+  </script>
+</body>
+</html>
