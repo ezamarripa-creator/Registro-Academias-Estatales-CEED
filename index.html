@@ -537,6 +537,9 @@
     .kpi-card.accent .kpi-card__label { color: rgba(255,255,255,.7); }
     .kpi-card.accent .kpi-card__value { color: #fff; }
     .kpi-card.accent .kpi-card__sub { color: rgba(255,255,255,.6); }
+    .kpi-card--completo   { background: #D8F0E6; }
+    .kpi-card--parcial    { background: #FDF0D3; }
+    .kpi-card--sin-envio  { background: #F5E8E8; }
 
     /* TABLA SUBSISTEMAS */
     .table-wrap {
@@ -982,17 +985,17 @@
           <div class="kpi-card__value" id="d-con-envio">—</div>
           <div class="kpi-card__sub">al menos una academia</div>
         </div>
-        <div class="kpi-card">
+        <div class="kpi-card kpi-card--sin-envio">
           <div class="kpi-card__label">Sin envío</div>
           <div class="kpi-card__value" id="d-sin-envio">—</div>
           <div class="kpi-card__sub">pendientes</div>
         </div>
-        <div class="kpi-card">
+        <div class="kpi-card kpi-card--parcial">
           <div class="kpi-card__label">Participación parcial</div>
           <div class="kpi-card__value" id="d-parcial">—</div>
           <div class="kpi-card__sub">1–7 academias</div>
         </div>
-        <div class="kpi-card">
+        <div class="kpi-card kpi-card--completo">
           <div class="kpi-card__label">Participación completa</div>
           <div class="kpi-card__value" id="d-completo">—</div>
           <div class="kpi-card__sub">8 academias</div>
