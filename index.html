@@ -801,169 +801,17 @@
     <div class="site-header__brand">
       <div class="site-header__icon">🎓</div>
       <div>
-        <div class="site-header__title">Registro de Participantes</div>
+        <div class="site-header__title">Dashboard de Participación</div>
         <div class="site-header__sub">Academias Estatales — Concurso Estatal</div>
       </div>
     </div>
-    <nav class="site-header__nav">
-      <button class="btn-nav btn-nav--active" onclick="switchTab('formulario', this)">📝 Registro</button>
-      <button class="btn-nav btn-nav--ghost" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
-    </nav>
   </header>
 
   <!-- MAIN CONTENT -->
   <main class="main">
 
-    <!-- ==================== TAB: FORMULARIO ==================== -->
-    <div id="tab-formulario" class="tab-panel active">
-      <div class="section-label">Captura de datos</div>
-      <h1 class="section-title">Registro de Participante</h1>
-      <p class="section-desc">Complete todos los campos para registrar la participación del subsistema en la academia correspondiente. Los datos se guardan automáticamente en el sistema de seguimiento.</p>
-
-      <div class="form-layout">
-        <!-- COLUMNA FORMULARIO -->
-        <div>
-          <!-- Bloque 1: Datos del subsistema -->
-          <div class="card">
-            <div class="card__section-header">
-              <span class="card__section-icon">🏛️</span>
-              <span class="card__section-title">Información del Subsistema</span>
-            </div>
-            <div class="fields-grid">
-              <div class="field">
-                <label for="subsistema">Subsistema <span class="req">*</span></label>
-                <select id="subsistema" required>
-                  <option value="">— Seleccione subsistema —</option>
-                  <option>Albert Einstein</option>
-                  <option>ByCENED</option>
-                  <option>CECATI</option>
-                  <option>CECyTED</option>
-                  <option>COBAED</option>
-                  <option>CONALEP</option>
-                  <option>DGB 9/31 de Gómez</option>
-                  <option>DGB Villa Unión</option>
-                  <option>DGETAyCM</option>
-                  <option>DGETI</option>
-                  <option>ESCUELAS PARTICULARES</option>
-                  <option>INSTITUTO "18 DE MARZO"</option>
-                  <option>PREPARATORIAS ESTATALES</option>
-                  <option>TELEBACHILLERATO COMUNITARIO</option>
-                  <option>UJED</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="responsable">Responsable (quien reporta) <span class="req">*</span></label>
-                <input type="text" id="responsable" placeholder="Nombre completo del responsable" required />
-              </div>
-              <div class="field field-full">
-                <label for="correo-resp">Correo del responsable <span class="req">*</span></label>
-                <input type="email" id="correo-resp" placeholder="correo@institucion.edu.mx" required />
-              </div>
-            </div>
-          </div>
-
-          <!-- Bloque 2: Academia -->
-          <div class="card">
-            <div class="card__section-header">
-              <span class="card__section-icon">📚</span>
-              <span class="card__section-title">Academia que Participará <span class="req">*</span></span>
-            </div>
-            <div class="academias-grid" id="academias-grid">
-              <!-- Generadas por JS -->
-            </div>
-          </div>
-
-          <!-- Bloque 3: Datos del participante -->
-          <div class="card">
-            <div class="card__section-header">
-              <span class="card__section-icon">👤</span>
-              <span class="card__section-title">Datos del Participante</span>
-            </div>
-            <div class="fields-grid">
-              <div class="field field-full">
-                <label for="nombre-part">Nombre completo del participante <span class="req">*</span></label>
-                <input type="text" id="nombre-part" placeholder="Nombre Apellido Apellido" required />
-              </div>
-              <div class="field">
-                <label for="tel-part">Teléfono del participante <span class="req">*</span></label>
-                <input type="tel" id="tel-part" placeholder="618 000 0000" required />
-              </div>
-              <div class="field">
-                <label for="correo-part">Correo electrónico del participante <span class="req">*</span></label>
-                <input type="email" id="correo-part" placeholder="participante@correo.com" required />
-              </div>
-              <div class="field field-full">
-                <label for="observaciones">Observaciones</label>
-                <textarea id="observaciones" placeholder="Información adicional relevante (opcional)..."></textarea>
-              </div>
-            </div>
-          </div>
-
-          <!-- BTN ENVIAR -->
-          <div class="card" style="padding: 20px 32px;">
-            <div id="form-error" style="color:var(--c-error);font-size:.82rem;margin-bottom:12px;display:none;"></div>
-            <button class="btn-submit" id="btn-submit" onclick="enviarRegistro()">
-              <span>Registrar Participación</span>
-              <span>→</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- COLUMNA LATERAL: RESUMEN -->
-        <div class="sidebar-panel" id="sidebar-summary">
-          <div class="summary-card">
-            <div class="summary-card__title">Resumen de Captura</div>
-            <div class="stat-row">
-              <span class="stat-row__label">Total subsistemas</span>
-              <span class="stat-row__value" id="sum-total">15</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-row__label">Con envío</span>
-              <span class="stat-row__value green" id="sum-con-envio">—</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-row__label">Sin envío</span>
-              <span class="stat-row__value amber" id="sum-sin-envio">—</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-row__label">Participación parcial</span>
-              <span class="stat-row__value blue" id="sum-parcial">—</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-row__label">Participación completa</span>
-              <span class="stat-row__value green" id="sum-completo">—</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-row__label">Total general</span>
-              <span class="stat-row__value" id="sum-general">—</span>
-            </div>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar-label">
-                <span>Avance general</span>
-                <span id="sum-pct">0%</span>
-              </div>
-              <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="summary-card">
-            <div class="summary-card__title">Registros por Academia</div>
-            <div class="acad-grid-mini" id="acad-mini-grid">
-              <!-- Generado por JS -->
-            </div>
-          </div>
-
-          <button class="btn-refresh" onclick="cargarResumen()" style="width:100%;justify-content:center;">
-            <span>↻</span> Actualizar resumen
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB: DASHBOARD ==================== -->
-    <div id="tab-dashboard" class="tab-panel">
+    <!-- ==================== DASHBOARD ==================== -->
+    <div id="tab-dashboard" class="tab-panel active">
       <div class="dash-header">
         <div class="section-label">Control de seguimiento</div>
         <h1 class="section-title">Dashboard de Participación</h1>
@@ -1073,9 +921,6 @@
     </div>
   </footer>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast"></div>
-
   <!-- ============================================================
        JAVASCRIPT PRINCIPAL
   ============================================================ -->
@@ -1113,52 +958,12 @@
        INIT
     ============================================================ */
     window.addEventListener('DOMContentLoaded', () => {
-      renderAcademiasGrid();
-      renderAcadMiniGrid();
       renderAcadBars([]);
-      cargarResumen();
+      cargarDashboard();
       setTimeout(() => {
         document.getElementById('initial-loader').classList.add('hidden');
       }, 800);
     });
-
-    /* ============================================================
-       RENDER ACADEMIAS (CHECKBOXES)
-    ============================================================ */
-    function renderAcademiasGrid() {
-      const container = document.getElementById('academias-grid');
-      container.innerHTML = ACADEMIAS.map(a => `
-        <label class="check-item" id="ci-${a.id}" onclick="toggleCheck('${a.id}',this)">
-          <input type="checkbox" id="chk-${a.id}" value="${a.id}" />
-          ${a.label}
-        </label>
-      `).join('');
-    }
-
-    function toggleCheck(id, el) {
-      const chk = document.getElementById('chk-' + id);
-      chk.checked = !chk.checked;
-      el.classList.toggle('selected', chk.checked);
-    }
-
-    function getAcademiasSeleccionadas() {
-      return ACADEMIAS
-        .filter(a => document.getElementById('chk-' + a.id)?.checked)
-        .map(a => a.label);
-    }
-
-    /* ============================================================
-       RENDER PANEL LATERAL MINI
-    ============================================================ */
-    function renderAcadMiniGrid(counts = {}) {
-      const container = document.getElementById('acad-mini-grid');
-      container.innerHTML = ACADEMIAS.map(a => `
-        <div class="acad-mini-row">
-          <span class="acad-mini-label">${a.label}</span>
-          <span class="acad-mini-count">${counts[a.label] ?? '—'}</span>
-        </div>
-      `).join('');
-    }
 
     /* ============================================================
        RENDER BARRAS DE ACADEMIAS (DASHBOARD)
@@ -1182,96 +987,7 @@
     }
 
     /* ============================================================
-       ENVIAR REGISTRO
-    ============================================================ */
-    async function enviarRegistro() {
-      const errEl = document.getElementById('form-error');
-      errEl.style.display = 'none';
-
-      // Recopilar valores
-      const subsistema   = document.getElementById('subsistema').value.trim();
-      const responsable  = document.getElementById('responsable').value.trim();
-      const correoResp   = document.getElementById('correo-resp').value.trim();
-      const academias    = getAcademiasSeleccionadas();
-      const nombrePart   = document.getElementById('nombre-part').value.trim();
-      const telPart      = document.getElementById('tel-part').value.trim();
-      const correoPart   = document.getElementById('correo-part').value.trim();
-      const obs          = document.getElementById('observaciones').value.trim();
-
-      // Validaciones
-      const errores = [];
-      if (!subsistema)          errores.push('Selecciona el subsistema.');
-      if (!responsable)         errores.push('Ingresa el nombre del responsable.');
-      if (!correoResp)          errores.push('Ingresa el correo del responsable.');
-      if (academias.length === 0) errores.push('Selecciona al menos una academia.');
-      if (!nombrePart)          errores.push('Ingresa el nombre del participante.');
-      if (!telPart)             errores.push('Ingresa el teléfono del participante.');
-      if (!correoPart)          errores.push('Ingresa el correo del participante.');
-
-      if (errores.length > 0) {
-        errEl.textContent = errores.join(' ');
-        errEl.style.display = 'block';
-        return;
-      }
-
-      // UI loading
-      const btn = document.getElementById('btn-submit');
-      btn.disabled = true;
-      btn.innerHTML = '<div class="spinner"></div><span>Enviando...</span>';
-      showToast('Enviando registro al sistema…', 'loading');
-
-      const payload = {
-        action: 'registrar',
-        subsistema, responsable, correoResp,
-        academias: academias.join(', '),
-        nombrePart, telPart, correoPart, obs
-      };
-
-      try {
-        const resp = await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify(payload)
-        });
-        const data = await resp.json();
-        if (data.success) {
-          showToast('✓ Registro guardado correctamente', 'success');
-          limpiarFormulario();
-          cargarResumen();
-        } else {
-          throw new Error(data.error || 'Error desconocido');
-        }
-      } catch (err) {
-        showToast('✗ Error al guardar: ' + err.message, 'error');
-        errEl.textContent = 'Error al conectar con el servidor. Intente de nuevo.';
-        errEl.style.display = 'block';
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<span>Registrar Participación</span><span>→</span>';
-      }
-    }
-
-    /* ============================================================
-       LIMPIAR FORMULARIO
-    ============================================================ */
-    function limpiarFormulario() {
-      document.getElementById('subsistema').value = '';
-      document.getElementById('responsable').value = '';
-      document.getElementById('correo-resp').value = '';
-      document.getElementById('nombre-part').value = '';
-      document.getElementById('tel-part').value = '';
-      document.getElementById('correo-part').value = '';
-      document.getElementById('observaciones').value = '';
-      ACADEMIAS.forEach(a => {
-        const chk = document.getElementById('chk-' + a.id);
-        if (chk) chk.checked = false;
-        const ci  = document.getElementById('ci-' + a.id);
-        if (ci)  ci.classList.remove('selected');
-      });
-    }
-
-    /* ============================================================
-       CARGAR RESUMEN (panel lateral + dashboard)
+       CARGAR RESUMEN (dashboard)
     ============================================================ */
     async function cargarResumen() {
       try {
@@ -1280,10 +996,7 @@
         const data = await resp.json();
         if (data.success) {
           resumenData = data.resumen;
-          actualizarPanelResumen(data.resumen);
-          if (document.getElementById('tab-dashboard').classList.contains('active')) {
-            actualizarDashboard(data.resumen);
-          }
+          actualizarDashboard(data.resumen);
         }
       } catch (e) {
         console.warn('No se pudo cargar el resumen:', e.message);
@@ -1292,24 +1005,6 @@
 
     async function cargarDashboard() {
       await cargarResumen();
-      if (resumenData) actualizarDashboard(resumenData);
-    }
-
-    /* ============================================================
-       ACTUALIZAR PANEL LATERAL
-    ============================================================ */
-    function actualizarPanelResumen(r) {
-      const pct = Math.round((r.totalRegistros / (SUBSISTEMAS.length * ACADEMIAS.length)) * 100);
-
-      document.getElementById('sum-con-envio').textContent  = r.conEnvio  ?? 0;
-      document.getElementById('sum-sin-envio').textContent  = r.sinEnvio  ?? 0;
-      document.getElementById('sum-parcial').textContent    = r.parcial   ?? 0;
-      document.getElementById('sum-completo').textContent   = r.completo  ?? 0;
-      document.getElementById('sum-general').textContent    = r.totalRegistros ?? 0;
-      document.getElementById('sum-pct').textContent        = pct + '%';
-      document.getElementById('progress-fill').style.width  = pct + '%';
-
-      renderAcadMiniGrid(r.porAcademia || {});
     }
 
     /* ============================================================
@@ -1364,37 +1059,6 @@
       renderAcadBars(r.porAcademia || {});
     }
 
-    /* ============================================================
-       CAMBIAR TAB
-    ============================================================ */
-    function switchTab(tab, btn) {
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.btn-nav').forEach(b => {
-        b.classList.remove('btn-nav--active');
-        b.classList.add('btn-nav--ghost');
-      });
-      document.getElementById('tab-' + tab).classList.add('active');
-      btn.classList.add('btn-nav--active');
-      btn.classList.remove('btn-nav--ghost');
-
-      if (tab === 'dashboard') cargarDashboard();
-    }
-
-    /* ============================================================
-       TOAST
-    ============================================================ */
-    let toastTimer;
-    function showToast(msg, tipo = 'success') {
-      const t = document.getElementById('toast');
-      clearTimeout(toastTimer);
-      t.className = 'toast toast--' + tipo;
-      const icon = tipo === 'success' ? '✓' : tipo === 'error' ? '✗' : '<div class="spinner"></div>';
-      t.innerHTML = icon + ' ' + msg;
-      t.classList.add('show');
-      if (tipo !== 'loading') {
-        toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
-      }
-    }
   </script>
 </body>
 </html>
